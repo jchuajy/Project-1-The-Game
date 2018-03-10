@@ -29,8 +29,6 @@ function closeOverlay() {
     $("#mainOverlay").css("height", "0%");
 };
 
-
-
 window.onload = function() {
 
 //build map function
@@ -119,6 +117,9 @@ window.onload = function() {
 			alert("You can't move there!");
 		} else if (direction === "west" && __currentPlayerCol === 0) {
 			alert("You can't move there!");
+		} else if (__currentPlayerRow === __endRow && __currentPlayerCol === __endCol) {
+			//check if player has reached the exit
+			gameEnd(reachedExit);
 		} else if (direction == "north") {
 			__map[__currentPlayerRow][__currentPlayerCol] = ".";
 			__currentPlayerRow = __currentPlayerRow - 1;
@@ -141,12 +142,36 @@ window.onload = function() {
 
 //things to execute when moving to new room
 	var newRoom = function() {
-		exeMoveEvent();
+		//added a random encounter to determine what type of events happen
+		var roomRoll = Math.floor(Math.random() * 5 + 1)
+		if (roomRoll === 0) {
+			exeMoveEvent();
+		} else if (roomRoll <= 3) {
+			exeFightEvent();
+			exeMoveEvent();
+		} else {
+			exeWorldEvent();
+			exeFightEvent();
+			exeMoveEvent();
+		}
+	}
+
+//things to execute when game ends
+	var gameEnd = function(type) {
+		if (type === "reachedExit") {
+			alert("You have reached the exit!");
+		} else if (type === "noHealth") {
+			alert("You have died!");
+		} else if (type === "maxFear") {
+			alert("You are too scared to continue!")
+		} else {
+			//included as a error catch
+			alert("There was an error! Please report this bug to a dev.");
+		}
 	}
 
 
-
-
+//start the game!
 gameStart();
 
 
