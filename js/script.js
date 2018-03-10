@@ -21,7 +21,7 @@ var __endCol;
 
 //Open overlay
 function openOverlay() {
-	$("#mainOverlay").css("height", "100%");
+	$("#mainOverlay").css("height", "60%");
 };
 
 /* Close when someone clicks on the "x" symbol inside the overlay */
