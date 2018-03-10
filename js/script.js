@@ -54,39 +54,23 @@ window.onload = function() {
 		$("#overlayContent").html(content);
 	}
 
-//what happens upon on gamestart/game reset
-	var gameStart = function () {
-		//insert welcome text
-		changeOverlayContent(initialText);
-		//add event listener to submit button: get playername and close overlay
-		$("#submitPlayerName").click(function() {
-			__playerName = $("#playerNameInput").val();
-			newRoom();
-		});
-		//set current playerposition to 1-1
-		__currentPlayerRow = 0;
-		__currentPlayerCol = 0;
-		//mark current player position
-		__map[__currentPlayerRow][__currentPlayerCol] = "X";
-		//reset player stats
-		__playerStatus["boredom"] = 0;
-		__playerStatus["laziness"] = 0;
-		__playerStatus["health"] = 5;
-		__playerStatus["fright"] = 0;
-		//create exit point
-		__endRow = Math.floor((Math.random() * (__map.length - 1)) + 1);
-		__endCol = Math.floor((Math.random() * (__map.length - 1)) + 1);
-		__map[__endRow][__endCol] = "E";
-		openOverlay();
-		//create map
-		buildMap();	
-	}
-
 //creation of world events (which will run each time player enters new room)
 	var exeWorldEvent = function() {
+		var randomise = Math.floor(Math.random() * (worldEvent.length - 1));
 		//show event text on main display
-		changeOverlayContent(worldEvent[Math.floor(Math.random() * worldEvent.length)]);
+		changeOverlayContent(findValue(worldEvent, randomise, "text"));
+		//change background image
+		$("#mainDisplay").css("background-image", "url('./img/gasBog.jpg')");
 
+	};
+
+//get find corresponding value of key in each event
+	var findValue = function(event, eventNumber, key) {
+		for (var searchKey in event[eventNumber]) {
+			if (searchKey === key) {
+				return event[eventNumber][key];
+			}
+		}
 	};
 
 //creation of fight battles (which will run each time player enters new room)
@@ -170,10 +154,38 @@ window.onload = function() {
 		}
 	}
 
+//what happens upon on gamestart/game reset
+	var gameStart = function () {
+		//insert welcome text
+		changeOverlayContent(initialText);
+		//add event listener to submit button: get playername and close overlay
+		$("#submitPlayerName").click(function() {
+			__playerName = $("#playerNameInput").val();
+			exeWorldEvent();
+		});
+		//set current playerposition to 1-1
+		__currentPlayerRow = 0;
+		__currentPlayerCol = 0;
+		//mark current player position
+		__map[__currentPlayerRow][__currentPlayerCol] = "X";
+		//reset player stats
+		__playerStatus["boredom"] = 0;
+		__playerStatus["laziness"] = 0;
+		__playerStatus["health"] = 5;
+		__playerStatus["fright"] = 0;
+		//create exit point
+		__endRow = Math.floor((Math.random() * (__map.length - 1)) + 1);
+		__endCol = Math.floor((Math.random() * (__map.length - 1)) + 1);
+		__map[__endRow][__endCol] = "E";
+		openOverlay();
+		//create map
+		buildMap();	
+	}
+
+
 
 //start the game!
 gameStart();
-
 
 
 
