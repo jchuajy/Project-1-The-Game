@@ -1,38 +1,37 @@
+.flexContainer {
+  display: flex;
+}
 #framing {
   background-color: lightgreen;
   height: 10vh;
-  max-width: 100%;
-  z-index: -1;
+  width: 100vw;
+
 }
 
 #menuList {
   background-color: lightblue;
   height: 60vh;
-  z-index: -1;
+  width: 5vw;
+
 }
 
 #healthGlobe {
   background-color: pink;
   height: 30vh;
-  z-index: -1;
+  width: 20vw;
+
 }
 
 #map {
   background-color: coral;
   height: 30vh;
-  z-index: -1;
-}
-
-#menuContainer {
-  padding: 0;
-  margin: 0;
-  border: 0;
+  width: 20vw;
 }
 
 #textDisplay {
   background-color: teal;
   height: 30vh;
-  z-index: -1;
+  width: 60vw;
 }
 
 .container-fluid {
@@ -44,7 +43,8 @@
 #mainDisplay {
   background-color: fuchsia;
   height: 60vh;
-  z-index: -1;
+  width: 95vw;
+
 }
 
 h1 {
