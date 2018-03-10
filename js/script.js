@@ -7,6 +7,7 @@ var __map = [
 			[".", ".", ".", ".", "."]
 		];
 
+var __playerName;
 var __currentPlayerCol = 0;
 var __currentPlayerRow = 0;
 var __playerStatus = {
@@ -20,13 +21,12 @@ var __endCol;
 
 //Open overlay
 function openOverlay() {
-    document.getElementById("mainOverlay").style.height = "100%";
-    console.log("opened")
+	$("#mainOverlay").css("height", "100%");
 };
 
 /* Close when someone clicks on the "x" symbol inside the overlay */
 function closeOverlay() {
-    document.getElementById("mainOverlay").style.height = "0%";
+    $("#mainOverlay").css("height", "0%");
 };
 
 
@@ -43,20 +43,18 @@ window.onload = function() {
 		};
 	};
 
-
-
-
+//what happens upon on gamestart/game reset
 	var gameStart = function () {
-		//create map
-		buildMap();
 		//insert welcome text
-		$("#overlayContent").append('<p>' + initialText + '<p>');
-		//name input box
-		$("#overlayContent").append("<input type='text' name='PlayerOne'>")
+		$("#overlayContent").append(initialText);
+		//add event listener to submit button: get playername and close overlay
+		$("#submitPlayerName").click(function() {
+			__playerName = $("#playerNameInput").val();
+			closeOverlay();
+		});
 		//set current playerposition to 1-1
 		__currentPlayerRow = 0;
 		__currentPlayerCol = 0;
-		console.log(__currentPlayerRow);
 		//mark current player position
 		__map[__currentPlayerRow][__currentPlayerCol] = "X";
 		//reset player stats
@@ -68,14 +66,23 @@ window.onload = function() {
 		__endRow = Math.floor((Math.random() * (__map.length - 1)) + 1);
 		__endCol = Math.floor((Math.random() * (__map.length - 1)) + 1);
 		__map[__endRow][__endCol] = "E";
-
-
-
-
 		openOverlay();
-
+		//create map
+		buildMap();
 		
 	}
+
+//creation of events (which will run each time player enters new room)
+	var worldEvent = function() {
+		//show event text on main display
+		//
+	}
+
+
+
+
+
+
 
 
 gameStart();
