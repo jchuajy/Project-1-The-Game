@@ -36,7 +36,7 @@ window.onload = function() {
 //build map function
 	var buildMap = function() {
 		//clear map
-		$("#map").html("");
+		$("#mapElement").html("");
 		//for length of map,
 		for (i = 0; i < __map.length; i++) {
 		//create an element <h1>
@@ -44,7 +44,7 @@ window.onload = function() {
 		//concat the values of __map[i] and make a new line
 		var mapInitial = __map[i].join("     ") + "\n";
 		//add the concated string to <h1>
-		$("#map").append(maph1);
+		$("#mapElement").append(maph1);
 		//append the <h1> to the map div
 		maph1.append(mapInitial);
 		};
@@ -62,7 +62,7 @@ window.onload = function() {
 		//show event text on main display
 		changeOverlayContent(findValue(worldEvent, randomise, "text"));
 		//change background image STRANGE url address
-		$("#mainDisplay").css("background-image", "url('./img/gasBog.jpg')");
+		$("body").css("background-image", "url('./img/gasBog.jpg')");
 		__playerStatus.health = __playerStatus.health + findValue(worldEvent, randomise, "health");
 
 	};

@@ -1,12 +1,12 @@
 
 
 //Text to display on game initialise
-var initialText = "<p> Welcome to Path of ... ! To begin, type in your name! <p> <input id='playerNameInput' type='text' value='Player One'> <button id='submitPlayerName' type='submit'>Submit</button>"
+var initialText = "<p> Welcome to Path of ... ! To begin, type in your name! </p> <p> <input id='playerNameInput' type='text' value='Player One'> <button id='submitPlayerName' type='submit'>Submit</button> </p>"
 
 //Establishing encounters
 var worldEvent = [{
 					name: "poisonBog",
-					text: "<p> You come across a poisonous bog <p>",
+					text: "<p> You come across a poisonous bog </p>",
 					textpt2: "You have lost 1 health",
 					image: "img/poisonBog.jpg",
 					health: -1}

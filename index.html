@@ -4,29 +4,22 @@
 	<title>Path of</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<script src=js/assets.js></script>
 	<script src=js/script.js></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-	<img src="img/textHeader.png">
+	<img id="bodyHeader" src="img/textHeader.png">
 	<div id="mainOverlay">
 		<a href="javascript:void(0)" id="closeOverlay" onclick="closeOverlay()">&times;</a>
 		<div id="overlayContent">
 		</div>
 	</div>
 	<div class="mainUI">
-			<div id="mainDisplay">mainDisplay
-			</div>
-	</div>
-	<div class="mainUI">
-			<div id="healthGlobe"></div>
 			<div id="healthBarContainer"><img id="healthBar" src="./img/health.png"></div>
-			<div id="menuList">menuList</div>
-			<div id="map"></div>
+			<div id="statusBar"><img src="./img/ironMask.png"><img src="./img/acuity.png"><img src="./img/exalted.png"><br></div>
+			<div id="map"><img id="mapFog" src="./img/mapFog.png"><div id="mapElement"></div></div>
 	</div>
 
 
