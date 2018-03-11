@@ -13,21 +13,23 @@ var __currentPlayerRow = 0;
 var __playerStatus = {
 		boredom: 0,
 		laziness: 0,
-		health: 5,
+		health: 10,
 		fright: 0
 	};
 var __endRow;
 var __endCol;
+var __maxPlayerHealth = 10;
 
 //Open overlay
 function openOverlay() {
-	$("#mainOverlay").css("height", "60%");
+	$("#mainOverlay").css("height", "65%");
 };
 
 /* Close when someone clicks on the "x" symbol inside the overlay */
 function closeOverlay() {
     $("#mainOverlay").css("height", "0%");
 };
+
 
 window.onload = function() {
 
@@ -59,8 +61,9 @@ window.onload = function() {
 		var randomise = Math.floor(Math.random() * (worldEvent.length - 1));
 		//show event text on main display
 		changeOverlayContent(findValue(worldEvent, randomise, "text"));
-		//change background image
+		//change background image STRANGE url address
 		$("#mainDisplay").css("background-image", "url('./img/gasBog.jpg')");
+		__playerStatus.health = __playerStatus.health + findValue(worldEvent, randomise, "health");
 
 	};
 
@@ -171,8 +174,9 @@ window.onload = function() {
 		//reset player stats
 		__playerStatus["boredom"] = 0;
 		__playerStatus["laziness"] = 0;
-		__playerStatus["health"] = 5;
+		__playerStatus["health"] = 10;
 		__playerStatus["fright"] = 0;
+		__maxPlayerHealth = 10;
 		//create exit point
 		__endRow = Math.floor((Math.random() * (__map.length - 1)) + 1);
 		__endCol = Math.floor((Math.random() * (__map.length - 1)) + 1);
@@ -182,11 +186,22 @@ window.onload = function() {
 		buildMap();	
 	}
 
+	var buildHealth = function() {
+		//calculate percentage of hp loss to be applied to clip function
+			var percentLoss;
+			if (__playerStatus["health"] > __maxPlayerHealth || __playerStatus["health"] === __maxPlayerHealth) {
+				percentLoss = 0;
+			} else {
+				percentLoss = (__maxPlayerHealth - __playerStatus["health"]) / __maxPlayerHealth * 100;
+			};
+		//apply loss to healthbar clip path
+			console.log("test");
+			$("#healthBar").css("clip-path", "inset(" + percentLoss + "% 0 0 0)");
+		};
 
 
 //start the game!
 gameStart();
-
 
 
 

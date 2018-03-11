@@ -6,7 +6,8 @@ var initialText = "<p> Welcome to Path of ... ! To begin, type in your name! <p>
 //Establishing encounters
 var worldEvent = [{
 					name: "poisonBog",
-					text: "You come across a poisonous bog",
+					text: "<p> You come across a poisonous bog <p>",
+					textpt2: "You have lost 1 health",
 					image: "img/poisonBog.jpg",
 					health: -1}
 				];
