@@ -156,3 +156,26 @@ p {
   bottom: 0;
   z-index: 2;
 }
+
+#colourBorder {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: cover;
+  -webkit-animation: fadeinout 3s linear forwards;
+  animation: fadeinout 3s linear forwards;
+  visibility: hidden;
+  z-index: 10;
+}
+
+@-webkit-keyframes fadeinout {
+  0%,100% { opacity: 0; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes fadeinout {
+  0%,100% { opacity: 0; }
+  50% { opacity: 0.8; }
+}

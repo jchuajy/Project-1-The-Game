@@ -75,13 +75,38 @@ window.onload = function() {
 
 //creation of world events (which will run each time player enters new room)
 	var exeWorldEvent = function() {
-		var randomise = Math.floor(Math.random() * (worldEvent.length - 1));
+		var randomise = Math.floor(Math.random() * (worldEvent.length));
 		//show event text on main display
 		changeOverlayContent(findValue(worldEvent, randomise, "text"));
 		//change background image STRANGE url address
-		$("body").css("background-image", "url('./img/gasBog.jpg')");
-		__playerStatus.health = __playerStatus.health + findValue(worldEvent, randomise, "health");
-
+		$("body").css("background-image", "url(" + worldEvent[randomise]["image"] + ")");
+		//create button to move to next screen
+		$("<button>").html("Next").attr("id", "nextButton").appendTo($("#overlayContent"));
+		//update playerStatus with values from assets.js + show coloured border
+		var changeAttribute = function() {
+			__playerStatus.health = __playerStatus.health + findValue(worldEvent, randomise, "health");
+			__playerStatus.durability = __playerStatus.durability + findValue(worldEvent, randomise, "durability");
+			__playerStatus.fear = __playerStatus.fear + findValue(worldEvent, randomise, "fear");
+			//find out what border type to display
+			var borderType;
+			if (findValue(worldEvent, randomise, "health") > 0) {
+				borderType = "./img/yellowBorder.jpg";
+				} else if (findValue(worldEvent, randomise, "health") < 0) {
+					borderType = "./img/redBorder.jpg";
+				} else if (findValue(worldEvent, randomise, "fear") > 0) {
+					borderType = "./img/blackBorder.jpg";
+				} else if (findValue(worldEvent, randomise, "durability") < 0) {
+					borderType = "./img/blueBorder.jpg";
+				};
+			//show borderflash
+			$("#colourBorder").css({"visibility": "visible",
+									"background-image": "url('" + borderType + "')"
+								});
+			//show attribute change text (text2)
+			changeOverlayContent(findValue(worldEvent, randomise, "text2"));
+			};
+		//add event listener to button
+		$("#nextButton").click(changeAttribute);
 	};
 
 //get find corresponding value of key in each event
@@ -146,18 +171,16 @@ window.onload = function() {
 
 //things to execute when moving to new room
 	var newRoom = function() {
-		//added a random encounter to determine what type of events happen
-		var roomRoll = Math.floor(Math.random() * 5 + 1)
-		if (roomRoll === 0) {
-			exeMoveEvent();
-		} else if (roomRoll <= 3) {
-			exeFightEvent();
-			exeMoveEvent();
-		} else {
-			exeWorldEvent();
-			exeFightEvent();
-			exeMoveEvent();
-		}
+		exeWorldEvent();
+		// //added a random encounter to determine what type of events happen
+		// var roomRoll = Math.floor(Math.random() * 5 + 1)
+		// if (roomRoll === 0) {
+		// 	exeMoveEvent();
+		// } else if (roomRoll <= 3) {
+		// 	exeFightEvent();
+		// } else {
+		// 	exeWorldEvent();
+		// }
 	}
 
 //things to execute when game ends
@@ -181,7 +204,7 @@ window.onload = function() {
 		//add event listener to submit button: get playername and close overlay
 		$("#submitPlayerName").click(function() {
 			__playerName = $("#playerNameInput").val();
-			exeMoveEvent();
+			newRoom();
 		});
 		//set current playerposition to 1-1
 		__currentPlayerRow = 0;
