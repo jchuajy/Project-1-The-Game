@@ -114,14 +114,16 @@ a {
 }
 
 #mapFog {
-  position: absolute;
-  left: 0;
-  margin: 0;
-  border: 0;
-  padding: 0;
-  clip-path: inset(0 0 0 0);
-  z-index: 2;
-  overflow: hidden;
+  background-image: url("../img/mapFog.png");
+  position: fixed;
+  left: 80vw;
+  height: 35vh;
+  width: 20vw;
+  position: fixed;
+  display: inline-block;
+  bottom: 0;
+  z-index: 4;
+  clip-path: inset(80% 0 0 0);
 }
 
 #statusBar img {
@@ -142,4 +144,15 @@ body {
 
 p {
   font-family: Fontin-Regular;
+}
+
+#mapFull {
+  background-image: url("../img/mapFull.png");
+  height: 35vh;
+  width: 20vw;
+  position: fixed;
+  display: inline-block;
+  left: 80vw;
+  bottom: 0;
+  z-index: 2;
 }

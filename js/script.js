@@ -11,8 +11,8 @@ var __playerName;
 var __currentPlayerCol = 0;
 var __currentPlayerRow = 0;
 var __playerStatus = {
-		boredom: 0,
-		laziness: 0,
+		gold: 0,
+		durability: 0,
 		health: 10,
 		fright: 0
 	};
@@ -35,19 +35,36 @@ window.onload = function() {
 
 //build map function
 	var buildMap = function() {
-		//clear map
-		$("#mapElement").html("");
-		//for length of map,
-		for (i = 0; i < __map.length; i++) {
-		//create an element <h1>
-		var maph1 = $('<h1>');
-		//concat the values of __map[i] and make a new line
-		var mapInitial = __map[i].join("     ") + "\n";
-		//add the concated string to <h1>
-		$("#mapElement").append(maph1);
-		//append the <h1> to the map div
-		maph1.append(mapInitial);
-		};
+//top left left: 60px, top: 95px bottom right top 175px, left 170px
+		var getPlayerLeftPX = __currentPlayerCol * 27 + 60;
+		var getPlayerTopPX = __currentPlayerRow * 20 + 95;
+		$('#locationMarker').css( {
+			position: "absolute",
+			top: getPlayerTopPX + "px",
+			left: getPlayerLeftPX + "px",
+			width: "30px",
+			height: "30px",
+			display: "inline-block",
+			"background-image": "url('./img/locationMarker.png')",
+			"background-repeat": "no-repeat",
+			"z-index": 4
+		}).appendTo("#mapFull");
+		var getPlayerLeftFog = 100 - __currentPlayerCol * 20 - 10;
+		var getPlayerTopFog = 100 - __currentPlayerRow * 20 - 10;
+		$("#mapFog").css("clip-path", "ellipse(" + getPlayerLeftFog + "% " + getPlayerTopFog + "% at 100% 99%");
+		// //clear map
+		// $("#mapElement").html("");
+		// //for length of map,
+		// for (i = 0; i < __map.length; i++) {
+		// //create an element <h1>
+		// var maph1 = $('<h1>');
+		// //concat the values of __map[i] and make a new line
+		// var mapInitial = __map[i].join("     ") + "\n";
+		// //add the concated string to <h1>
+		// $("#mapElement").append(maph1);
+		// //append the <h1> to the map div
+		// maph1.append(mapInitial);
+		// };
 	};
 
 //change overlay content
@@ -164,7 +181,7 @@ window.onload = function() {
 		//add event listener to submit button: get playername and close overlay
 		$("#submitPlayerName").click(function() {
 			__playerName = $("#playerNameInput").val();
-			exeWorldEvent();
+			exeMoveEvent();
 		});
 		//set current playerposition to 1-1
 		__currentPlayerRow = 0;
@@ -172,15 +189,32 @@ window.onload = function() {
 		//mark current player position
 		__map[__currentPlayerRow][__currentPlayerCol] = "X";
 		//reset player stats
-		__playerStatus["boredom"] = 0;
-		__playerStatus["laziness"] = 0;
+		__playerStatus["gold"] = 200;
+		__playerStatus["durability"] = 10;
 		__playerStatus["health"] = 10;
 		__playerStatus["fright"] = 0;
 		__maxPlayerHealth = 10;
 		//create exit point
 		__endRow = Math.floor((Math.random() * (__map.length - 1)) + 1);
 		__endCol = Math.floor((Math.random() * (__map.length - 1)) + 1);
+		//mark exit on variable __map
 		__map[__endRow][__endCol] = "E";
+		//mark exit on minimap
+		var getPlayerLeftPX = __endCol * 27 + 60
+		var getPlayerTopPX = __endRow * 20 + 95
+		$('<div>').css( {
+			position: "absolute",
+			top: getPlayerTopPX + "px",
+			left: getPlayerLeftPX + "px",
+			width: "30px",
+			height: "30px",
+			id: "locationMarker",
+			display: "inline-block",
+			"background-image": "url('./img/exitMarker.png')",
+			"background-repeat": "no-repeat",
+			"z-index": 4
+		}).appendTo("#mapFull");
+
 		openOverlay();
 		//create map
 		buildMap();	
@@ -195,9 +229,16 @@ window.onload = function() {
 				percentLoss = (__maxPlayerHealth - __playerStatus["health"]) / __maxPlayerHealth * 100;
 			};
 		//apply loss to healthbar clip path
-			console.log("test");
 			$("#healthBar").css("clip-path", "inset(" + percentLoss + "% 0 0 0)");
 		};
+
+
+
+
+
+
+
+
 
 
 //start the game!
