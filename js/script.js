@@ -14,7 +14,7 @@ var __playerStatus = {
 		gold: 0,
 		durability: 0,
 		health: 10,
-		fright: 0
+		fear: 0
 	};
 var __endRow;
 var __endCol;
@@ -192,7 +192,7 @@ window.onload = function() {
 		__playerStatus["gold"] = 200;
 		__playerStatus["durability"] = 10;
 		__playerStatus["health"] = 10;
-		__playerStatus["fright"] = 0;
+		__playerStatus["fear"] = 0;
 		__maxPlayerHealth = 10;
 		//create exit point
 		__endRow = Math.floor((Math.random() * (__map.length - 1)) + 1);
