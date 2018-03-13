@@ -43,7 +43,18 @@ var worldEvent = [	{
 				];
 
 
-var fightEvent = ["You have encountered Akira!" + "\n" + "Do you fight or run away?" + "\n" + "(Input fight or run)", 
-						"You have encountered Nick!" + "\n" + "Do you fight or run away?" + "\n" + "(Input fight or run)", 
-						"You have encountered Ray!" + "\n" + "Do you fight or run away?" + "\n" + "(Input fight or run)"];
+var fightEvent = [	{
+						name: "centaurFight",
+						text: "<p> While exploring, you come across a large centaur! Swipe your mouse to bash his head in with your mace. </p>",
+						image: "./img/centaur.jpeg"
+
+
+}
+					
+				];
+
+
+
+
+
 var moveEvent = [" <p> Which direction would you like to move? </p> <button id='moveNorth'>North</button> <br><button id='moveWest'>West</button> &emsp; <button id='moveEast'>East</button> <br> <button id='moveSouth'>South</button>"];

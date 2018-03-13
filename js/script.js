@@ -72,6 +72,80 @@ window.onload = function() {
 		$("#overlayContent").html("");
 		$("#overlayContent").html(content);
 	}
+//centaur fight event
+	var centaurFight = function() {
+		//declare mouse position
+		var currentMouseX;
+		var currentMouseY;
+		//declare enemy position
+		var enemyX;
+		var enemyY;
+		//show event text
+		changeOverlayContent(findValue(fightEvent, 0, "text"));
+		//append player image to overlay
+		$("<img>").attr({"src": "./img/playerImage.jpg", "id": "playerImage", "align": "left"}).appendTo($("#overlayContent"));
+		$("#playerImage").css({"text-align": "left", "display": "inline"});
+		//append enemy image to overlay
+		$("<img>").attr({"src": fightEvent[0]["image"], "id": "enemyImage"}).appendTo($("#overlayContent"));
+		$("#enemyImage").css({"display": "inline"});
+		//create button to show next screen
+		$("<button>").html("Next").attr("id", "nextButton").appendTo($("#overlayContent"));
+		$("#nextButton").css({"display": "block", "margin": "0 auto"});
+		//add event listener to button;
+		$("#nextButton").click(exeMoveEvent);
+
+		//find the element's distance from document window. in this case enemyImage
+		function offset(el) {
+	    var rect = el.getBoundingClientRect(),
+	    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+	    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+	    return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+		}
+	
+		//find enemyImage
+		var div = document.querySelector('#enemyImage');
+		var divOffset = offset(div);
+		enemyX = divOffset.left;
+		enemyY = divOffset.top;
+
+		// find current mouse position everytime it moves
+		var findMousePos = function(e) {
+
+			e = e || window.event
+		
+		    var currentMouseX = e.pageX;
+		    var currentMouseY = e.pageY;
+		
+		    // IE 8
+		    if (currentMouseX === undefined) {
+		        currentMouseX = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		        currentMouseY = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+		    }
+		
+			if (currentMouseX > enemyX - 20 && currentMouseX < enemyX + 200 && currentMouseY > enemyY - 20 && currentMouseY < enemyY + 200) {
+				console.log("hit!")
+			}
+		    
+		}
+		
+		// attach handler to the mousemove event of the document
+		if (document.attachEvent) document.attachEvent('mousemove', findMousePos);
+		else document.addEventListener('mousemove', findMousePos);
+
+
+
+
+
+
+
+
+	};
+
+
+//creation of fight battles (which will run each time player enters new room)
+	var exeFightEvent = function() {
+		centaurFight();
+	};
 
 //creation of world events (which will run each time player enters new room)
 	var exeWorldEvent = function() {
@@ -90,13 +164,13 @@ window.onload = function() {
 			//find out what border type to display
 			var borderType;
 			if (findValue(worldEvent, randomise, "health") > 0) {
-				borderType = "./img/yellowBorder.jpg";
+				borderType = "./img/yellowBorder.png";
 				} else if (findValue(worldEvent, randomise, "health") < 0) {
-					borderType = "./img/redBorder.jpg";
+					borderType = "./img/redBorder.png";
 				} else if (findValue(worldEvent, randomise, "fear") > 0) {
-					borderType = "./img/blackBorder.jpg";
+					borderType = "./img/blackBorder.png";
 				} else if (findValue(worldEvent, randomise, "durability") < 0) {
-					borderType = "./img/blueBorder.jpg";
+					borderType = "./img/blueBorder.png";
 				};
 			//show borderflash
 			$("#colourBorder").css({"visibility": "visible",
@@ -104,9 +178,14 @@ window.onload = function() {
 								});
 			//show attribute change text (text2)
 			changeOverlayContent(findValue(worldEvent, randomise, "text2"));
-			};
+			//create button to move to next screen
+			$("<button>").html("Next").attr("id", "nextButton").appendTo($("#overlayContent"));
+			//add event listener to button;
+			$("#nextButton").click(exeFightEvent);
+		};
 		//add event listener to button
 		$("#nextButton").click(changeAttribute);
+
 	};
 
 //get find corresponding value of key in each event
@@ -117,12 +196,6 @@ window.onload = function() {
 			}
 		}
 	};
-
-//creation of fight battles (which will run each time player enters new room)
-	var exeFightEvent = function() {
-		//show event text on main display
-		changeOverlayContent(fightEvent[Math.floor(Math.random() * fightEvent.length)]);
-	}
 
 //creation of move events (which will run as the last event in any room)
 	var exeMoveEvent = function() {
@@ -167,6 +240,7 @@ window.onload = function() {
 		__map[__currentPlayerRow][__currentPlayerCol] = "X";
 		//show changes on map
 		buildMap();
+		newRoom();
 	}
 
 //things to execute when moving to new room
@@ -264,6 +338,10 @@ window.onload = function() {
 
 
 
+
+
+
+
 //start the game!
 gameStart();
 
@@ -282,4 +360,5 @@ gameStart();
 
 
 };
+
 
