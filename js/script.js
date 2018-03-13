@@ -128,7 +128,7 @@ window.onload = function() {
 		    
 		}
 		
-		// attach handler to the mousemove event of the document
+		// attach function to the mousemove event
 		if (document.attachEvent) document.attachEvent('mousemove', findMousePos);
 		else document.addEventListener('mousemove', findMousePos);
 
@@ -229,22 +229,28 @@ window.onload = function() {
 		} else if (direction == "north") {
 			__map[__currentPlayerRow][__currentPlayerCol] = ".";
 			__currentPlayerRow = __currentPlayerRow - 1;
+			buildMap();
+			newRoom();
 		} else if (direction == "south") {
 			__map[__currentPlayerRow][__currentPlayerCol] = ".";
 			__currentPlayerRow = __currentPlayerRow + 1;
+			buildMap();
+			newRoom();
 		} else if (direction == "east") {
 			__map[__currentPlayerRow][__currentPlayerCol] = ".";
 			__currentPlayerCol = __currentPlayerCol + 1;
+			buildMap();
+			newRoom();
 		} else if (direction == "west") {
 			__map[__currentPlayerRow][__currentPlayerCol] = ".";
 			__currentPlayerCol = __currentPlayerCol - 1;
+			buildMap();
+			newRoom();
 		} else {
 			return;
 		}
 		__map[__currentPlayerRow][__currentPlayerCol] = "X";
-		//show changes on map
-		buildMap();
-		newRoom();
+
 	}
 
 //things to execute when moving to new room
