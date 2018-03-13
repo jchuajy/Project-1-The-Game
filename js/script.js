@@ -173,15 +173,19 @@ window.onload = function() {
 					borderType = "./img/blueBorder.png";
 				};
 			//show borderflash
+			$("<div>").attr("id", "colourBorder").appendTo($("body"));
 			$("#colourBorder").css({"visibility": "visible",
 									"background-image": "url('" + borderType + "')"
 								});
+			//remove after 4s
+			setTimeout(function() {$("#colourBorder").remove();}, 2000);
 			//show attribute change text (text2)
 			changeOverlayContent(findValue(worldEvent, randomise, "text2"));
 			//create button to move to next screen
 			$("<button>").html("Next").attr("id", "nextButton").appendTo($("#overlayContent"));
 			//add event listener to button;
 			$("#nextButton").click(exeFightEvent);
+			buildHealth();
 		};
 		//add event listener to button
 		$("#nextButton").click(changeAttribute);

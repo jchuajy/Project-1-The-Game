@@ -169,8 +169,8 @@ p {
   display: inline-block;
   background-repeat: no-repeat;
   background-size: cover;
-  -webkit-animation: fadeinout 3s linear forwards;
-  animation: fadeinout 3s linear forwards;
+  -webkit-animation: fadeinout 2s linear forwards;
+  animation: fadeinout 2s linear forwards;
   visibility: hidden;
   z-index: 10;
   pointer-events: none;
