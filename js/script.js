@@ -88,18 +88,21 @@ window.onload = function() {
 		//append enemy image to overlay
 		$("<img>").attr({"src": fightEvent[0]["image"], "id": "enemyImage"}).appendTo($("#overlayContent"));
 		$("#enemyImage").css({"display": "inline"});
-		//create button to show next screen
-		$("<button>").html("Next").attr("id", "nextButton").appendTo($("#overlayContent"));
-		$("#nextButton").css({"display": "block", "margin": "0 auto"});
-		//add event listener to button;
-		$("#nextButton").click(exeMoveEvent);
-
+		//centaur win screen
+		var centaurWin = function() {
+			changeOverlayContent(findValue(fightEvent, 0, "winText"))
+			//create button to show next screen
+			$("<button>").html("Next").attr("id", "nextButton").appendTo($("#overlayContent"));
+			$("#nextButton").css({"display": "block", "margin": "0 auto"});
+			//add event listener to button;
+			$("#nextButton").click(exeMoveEvent);
+		}
 		//find the element's distance from document window. in this case enemyImage
 		function offset(el) {
-	    var rect = el.getBoundingClientRect(),
-	    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-	    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-	    return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+		    var rect = el.getBoundingClientRect(),
+		    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+		    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+		    return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
 		}
 	
 		//find enemyImage
@@ -110,7 +113,6 @@ window.onload = function() {
 
 		// find current mouse position everytime it moves
 		var findMousePos = function(e) {
-
 			e = e || window.event
 		
 		    var currentMouseX = e.pageX;
@@ -123,26 +125,40 @@ window.onload = function() {
 		    }
 		
 			if (currentMouseX > enemyX - 20 && currentMouseX < enemyX + 200 && currentMouseY > enemyY - 20 && currentMouseY < enemyY + 200) {
-				console.log("hit!")
+				//enemy "death"
+				$("#enemyImage").css("transform", "rotate(90deg)")
+				//create button to show next screen
+				$("<button>").html("Next").attr("id", "nextButton").appendTo($("#overlayContent"));
+				$("#nextButton").css({"display": "block", "margin": "0 auto"});
+				//add event listener to button;
+				$("#nextButton").click(centaurWin);
+				$("*").unbind("mousemove", findMousePos);
 			}
 		    
 		}
 		
 		// attach function to the mousemove event
-		if (document.attachEvent) document.attachEvent('mousemove', findMousePos);
-		else document.addEventListener('mousemove', findMousePos);
-
-
-
-
-
-
-
+		$("*").mousemove(findMousePos);
 
 	};
 
+	var spiderFight = function() {
+		//show event text
+		changeOverlayContent(findValue(fightEvent, 1, "text"));
+		for (var i = 0; i < 2; i++) {
+			//randomise start pos
+			var randomLeft = Math.floor(Math.random() * 50);
+			var randomTop = Math.floor(Math.random() * 50);
+			console.log("test")
+			$("<img>").attr({"id": "spider"+i, "src": fightEvent[1]["image"]}).appendTo($("#overlayContent"));
+			$("#spider"+i).css({"left": -500 + "px", "top": 1 + "px", "width": 40 + "px", "z-index": 1000, "position": "relative", "text-align": "left"});
+		}
 
-//creation of fight battles (which will run each time player enters new room)
+
+	}
+
+
+//randomise fight battles (which will run each time player enters new room)
 	var exeFightEvent = function() {
 		centaurFight();
 	};
@@ -185,6 +201,7 @@ window.onload = function() {
 			$("<button>").html("Next").attr("id", "nextButton").appendTo($("#overlayContent"));
 			//add event listener to button;
 			$("#nextButton").click(exeFightEvent);
+			//update health bar
 			buildHealth();
 		};
 		//add event listener to button
@@ -244,27 +261,29 @@ window.onload = function() {
 		} else if (direction == "west") {
 			__map[__currentPlayerRow][__currentPlayerCol] = ".";
 			__currentPlayerCol = __currentPlayerCol - 1;
-			buildMap();
+				buildMap();
 			newRoom();
 		} else {
 			return;
 		}
 		__map[__currentPlayerRow][__currentPlayerCol] = "X";
+		if (__currentPlayerRow === __endRow && __currentPlayerCol === __endCol) {
+			gameEnd("reachedExit")
+		}
 
 	}
 
 //things to execute when moving to new room
 	var newRoom = function() {
-		exeWorldEvent();
-		// //added a random encounter to determine what type of events happen
-		// var roomRoll = Math.floor(Math.random() * 5 + 1)
-		// if (roomRoll === 0) {
-		// 	exeMoveEvent();
-		// } else if (roomRoll <= 3) {
-		// 	exeFightEvent();
-		// } else {
-		// 	exeWorldEvent();
-		// }
+		//added a random encounter to determine what type of events happen
+		var roomRoll = Math.floor(Math.random() * 5 + 1)
+		if (roomRoll === 0) {
+			exeMoveEvent();
+		} else if (roomRoll < 3) {
+			exeFightEvent();
+		} else {
+			exeWorldEvent();
+		}
 	}
 
 //things to execute when game ends
@@ -277,7 +296,7 @@ window.onload = function() {
 			alert("You are too scared to continue!")
 		} else {
 			//included as a error catch
-			alert("There was an error! Please report this bug to a dev.");
+			return;
 		}
 	}
 

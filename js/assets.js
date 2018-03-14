@@ -11,7 +11,8 @@ var worldEvent = [	{
 						image: "./img/gasBog.jpg",
 						health: -1,
 						durability: 0,
-						fear: 0
+						fear: 0,
+						gold: 0
 					},
 					{
 						name: "hallOfStatues",
@@ -20,7 +21,8 @@ var worldEvent = [	{
 						image: "./img/hallOfStatues.jpg",
 						health: 1,
 						durability: 0,
-						fear: 0
+						fear: 0,
+						gold: 0
 					},
 					{
 						name: "ruinsOfMidgaard",
@@ -29,7 +31,8 @@ var worldEvent = [	{
 						image: "./img/ruinsOfMidgaard.jpg",
 						health: 0,
 						durability: -1,
-						fear: 0
+						fear: 0,
+						gold: 0
 					},
 					{
 						name: "shoresOfExile",
@@ -38,7 +41,8 @@ var worldEvent = [	{
 						image: "./img/shoresOfExile.jpg",
 						health: 0,
 						durability: 0,
-						fear: 1
+						fear: 1,
+						gold: 0
 					}
 				];
 
@@ -46,10 +50,23 @@ var worldEvent = [	{
 var fightEvent = [	{
 						name: "centaurFight",
 						text: "<p> While exploring, you come across a large centaur! Swipe your mouse to bash his head in with your mace. </p>",
-						image: "./img/centaur.jpeg"
-
-
-}
+						image: "./img/centaur.jpeg",
+						winText: "<p> You have successfully defeated the centaur! Gain 50 gold. </p>",
+						health: 0,
+						durability: 0,
+						fear: 0,
+						gold: 50
+					},
+					{
+						name: "spiderFight",
+						text: "<p> SURPRISE! An army of spiders start swarming towards you! Click on the spiders to stomp them before you get overwhelmed! </p>",
+						image: "./img/spider.png",
+						winText: "<p> You have successfully prevent the swarm of spiders! Unfortunately spiders don't carry any gold...",
+						health: 0,
+						durability: 0,
+						fear: 1,
+						gold: 0
+					}
 					
 				];
 
@@ -57,4 +74,4 @@ var fightEvent = [	{
 
 
 
-var moveEvent = [" <p> Which direction would you like to move? </p> <button id='moveNorth'>North</button> <br><button id='moveWest'>West</button> &emsp; <button id='moveEast'>East</button> <br> <button id='moveSouth'>South</button>"];
+var moveEvent = [" <p> The land is still and quiet. You come across a crossroad. Which direction would you like to move? </p> <button id='moveNorth'>North</button> <br><button id='moveWest'>West</button> &emsp; <button id='moveEast'>East</button> <br> <button id='moveSouth'>South</button>"];
