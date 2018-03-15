@@ -115,6 +115,33 @@ window.onload = function(){
         $("#secOverlay").css("height", "0%");
     };
 
+    //combination of close sec overlay and open main overlay
+    function closeSecOpenMain() {
+        closeSecOverlay();
+        openOverlay();
+    }
+
+    //get find corresponding value of key in each event
+    function findValue(event, eventNumber, key) {
+        for (var searchKey in event[eventNumber]) {
+            if (searchKey === key) {
+                return event[eventNumber][key];
+            }
+        }
+    };
+
+    function buildHealth() {
+    //calculate percentage of hp loss to be applied to clip function
+        var percentLoss;
+        if (__playerStatus["health"] > __maxPlayerHealth || __playerStatus["health"] === __maxPlayerHealth) {
+            percentLoss = 0;
+        } else {
+            percentLoss = (__maxPlayerHealth - __playerStatus["health"]) / __maxPlayerHealth * 100;
+        };
+    //apply loss to healthbar clip path
+        $("#healthBar").css("clip-path", "inset(" + percentLoss + "% 0 0 0)");
+    };
+
     //creates and prints maze onto mainOverlay, as well as instructional text
     function generateMaze() {
         changeOverlayContent(mazeInstructions);
@@ -147,10 +174,146 @@ window.onload = function(){
         $("#secOverlayContent").html(content);
     };
 
+    //different varieties of fight events
+    //centaur fight event
+    function centaurFight() {
+        //declare mouse position
+        var currentMouseX;
+        var currentMouseY;
+        //declare enemy position
+        var enemyX;
+        var enemyY;
+        __playerStatus["health"] = __playerStatus["health"] - 1;
+        buildHealth();
+        //show event text
+        changeSecOverlayContent(findValue(fightEvent, 0, "text"));
+        //append player image to overlay
+        $("<img>").attr({"src": "./img/playerImage.jpg", "id": "playerImage", "align": "left"}).appendTo($("#secOverlayContent"));
+        $("#playerImage").css({"text-align": "left", "display": "inline"});
+        //append enemy image to overlay
+        $("<img>").attr({"src": fightEvent[0]["image"], "id": "enemyImage"}).appendTo($("#secOverlayContent"));
+        $("#enemyImage").css({"display": "inline"});
+        //centaur win screen
+        function centaurWin() {
+            changeSecOverlayContent(findValue(fightEvent, 0, "winText"))
+            //create button to show next screen
+            $("<button>").html("Next").attr("id", "nextButton").appendTo($("#secOverlayContent"));
+            $("#nextButton").css({"display": "block", "margin": "0 auto"});
+            //add event listener to button;
+            $("#nextButton").click(closeSecOpenMain);
+        }
+        //find the element's distance from document window. in this case enemyImage
+        function offset(el) {
+            var rect = el.getBoundingClientRect(),
+            scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+            scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+        }
+    
+        //find enemyImage
+        var div = document.querySelector('#enemyImage');
+        var divOffset = offset(div);
+        enemyX = divOffset.left;
+        enemyY = divOffset.top;
+
+        // find current mouse position everytime it moves
+        var findMousePos = function(e) {
+            e = e || window.event
+        
+            var currentMouseX = e.pageX;
+            var currentMouseY = e.pageY;
+        
+            // IE 8
+            if (currentMouseX === undefined) {
+                currentMouseX = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                currentMouseY = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+            }
+        
+            if (currentMouseX > enemyX - 20 && currentMouseX < enemyX + 200 && currentMouseY > enemyY - 20 && currentMouseY < enemyY + 200) {
+                //enemy "death"
+                $("#enemyImage").css("transform", "rotate(90deg)")
+                //create button to show next screen
+                $("<button>").html("Next").attr("id", "nextButton").appendTo($("#secOverlayContent"));
+                $("#nextButton").css({"display": "block", "margin": "0 auto"});
+                //add event listener to button;
+                $("#nextButton").click(centaurWin);
+                $(window).unbind("mousemove", findMousePos);
+            }
+            
+        }
+        
+        // attach function to the mousemove event
+        $(window).mousemove(findMousePos);
+
+    };
+
+    //spider fight event
+    function spiderFight() {
+        //set number of spiders to generate
+        var spiderNumber = 5;
+        //show event text on main display
+        changeSecOverlayContent(findValue(fightEvent, 1, "text"));
+        //creating array to facilitate scoping issue
+        var spiderArray = [];
+        for (var i = 0; i < spiderNumber; i++) {
+            //randomise where spiders pop up
+            var randomLeft = Math.floor(Math.random() * 800);
+            var randomTop = Math.floor(Math.random() * 300);
+            $("<img>").attr({"class": "spiders", "id": "spider" + i, "src": fightEvent[1]["image"]}).appendTo($("#secOverlayContent"));
+            $("#spider" + i).css({"left": (-550 + randomLeft) + "px", "top": (1 + randomTop) + "px", "width": 40 + "px", "z-index": 1000, "position": "relative", "text-align": "left"});
+
+    
+            // //add event listeners to spider images (weird style that doesnt work. kept for posterity)
+            // $("#spider" + i).click(function() {
+            //     console.log("#spider" + i)
+            //     $("#spider" + i).css("display", "none");
+            // });
+        };
+        //strange loop scoping behaviour(thanks Nick)
+        spiderArray = document.querySelectorAll(".spiders");  
+        //for each spider, on click, disappear
+        spiderArray.forEach(function(e) {
+            e.addEventListener("click", function(spiderimage) {
+                spiderimage.target.style.opacity = 0;
+                spiderNumber = spiderNumber - 1;
+                if (spiderNumber === 1) {
+                    spiderWin();
+                }
+            });
+        });
+
+        //spider win screen
+        function spiderWin() {
+            changeSecOverlayContent(findValue(fightEvent, 1, "winText"))
+            //create button to show next screen
+            $("<button>").html("Next").attr("id", "nextButton").appendTo($("#secOverlayContent"));
+            $("#nextButton").css({"display": "block", "margin": "0 auto"});
+            //add event listener to button;
+            $("#nextButton").click(closeSecOpenMain);
+        };
+        
+
+                                                                                                                                                                                                                             
+    };
 
     //randomise fight battles (which will run each time player enters new room)
     function exeFightEvent() {
-        console.log("fight!");
+        //closes maze
+        closeOverlay();
+        //open sec overlay
+        openSecOverlay();
+        //randomise the event that will occur
+        switch (Math.floor(Math.random() * Math.floor(fightEvent.length))) {
+            case 0: 
+            centaurFight();
+            break;
+            case 1:
+            spiderFight();
+            break;
+        };
+
+
+
     };
 
     //creation of world events (which will run each time player enters new room)
