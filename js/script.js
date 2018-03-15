@@ -1,5 +1,6 @@
 //create global variables for easy access
 var __currentCell;
+var __createCells;
 
 
 
@@ -9,16 +10,16 @@ var __currentCell;
 function createMaze(numberOfCols, numberOfRows) {
     //easy to reference total cells for cell check later
     var __totalCells = numberOfRows * numberOfCols
-    var createCells = [];
+    __createCells = [];
     var cellConstruct = [];
     //create the requisite array structure
     for (var i = 0; i < numberOfRows; i++) {
-        createCells[i] = [];
+        __createCells[i] = [];
         cellConstruct[i] = [];
-    //top left cell with all 4 walls up is createCells[0][0][0,0,0,0]
+    //top left cell with all 4 walls up is __createCells[0][0][0,0,0,0]
     //construct is simply to determine if cell has been checked before(false if it has been checked)
         for (var j = 0; j < numberOfCols; j++) {
-            createCells[i][j] = [0,0,0,0];
+            __createCells[i][j] = [0,0,0,0];
             cellConstruct[i][j] = true;
         }
     }
@@ -55,8 +56,8 @@ function createMaze(numberOfCols, numberOfRows) {
             nextCell = neighbours[Math.floor(Math.random() * neighbours.length)];
             
             // Remove the wall between the current cell and nextCell
-            createCells[__currentCell[0]][__currentCell[1]][nextCell[2]] = 1;
-            createCells[nextCell[0]][nextCell[1]][nextCell[3]] = 1;
+            __createCells[__currentCell[0]][__currentCell[1]][nextCell[2]] = 1;
+            __createCells[nextCell[0]][nextCell[1]][nextCell[3]] = 1;
             
             // Mark the nextCell as visited
             cellConstruct[nextCell[0]][nextCell[1]] = false;
@@ -71,8 +72,8 @@ function createMaze(numberOfCols, numberOfRows) {
             __currentCell = solution.pop();
         }    
     }
-    console.log(createCells);
-    return createCells;
+    console.log(__createCells);
+    return __createCells;
 
 };
 
@@ -98,19 +99,48 @@ window.onload = function(){
     //add sprite to current cell (just as a randomised start point for player)
     $("#" + __currentCell[0] + "-" + __currentCell[1]).css("background-image", "url('./img/marauderSprite.jpg");
 
+    //moving the player around the board
     function movePlayer(direction) {
-        $("#" + __currentCell[0] + "-" + __currentCell[1]).css("background-image", "none");
+        //if up arrow was pressed,
         if (direction === "north") {
-            __currentCell[0] = __currentCell[0] - 1;
+            //check if there are walls north of __currentCell
+            if (__createCells[__currentCell[0]][__currentCell[1]][0] == 1) {
+                $("#" + __currentCell[0] + "-" + __currentCell[1]).css("background-image", "none");
+                __currentCell[0] = __currentCell[0] - 1;
+            } else {
+                return;
+            };
+            
         } else if (direction === "east") {
-            __currentCell[1] = __currentCell[1] + 1;
+            //check if there are walls east of __currentCell
+            if (__createCells[__currentCell[0]][__currentCell[1]][1] == 1) {
+                $("#" + __currentCell[0] + "-" + __currentCell[1]).css("background-image", "none");
+                __currentCell[1] = __currentCell[1] + 1;
+            } else {
+                return;
+            };
+           
         } else if (direction === "south") {
-            __currentCell[0] = __currentCell[0] + 1;
+            //check if there are walls south of __currentCell
+            if (__createCells[__currentCell[0]][__currentCell[1]][2] == 1) {
+                $("#" + __currentCell[0] + "-" + __currentCell[1]).css("background-image", "none");
+                __currentCell[0] = __currentCell[0] + 1;
+            } else {
+                return;
+            };
         } else if (direction === "west") {
-            __currentCell[1] = __currentCell[1] - 1;
+            //check if there are walls west of __currentCell
+            if (__createCells[__currentCell[0]][__currentCell[1]][3] == 1) {
+                $("#" + __currentCell[0] + "-" + __currentCell[1]).css("background-image", "none");
+                __currentCell[1] = __currentCell[1] - 1;
+            } else {
+                return;
+            };
+
         } else {
             console.log("movePlayer error dev pls fix")
         }
+        //show player sprite at new __currentCell
         $("#" + __currentCell[0] + "-" + __currentCell[1]).css("background-image", "url('./img/marauderSprite.jpg");
     };
 
