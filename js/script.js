@@ -186,6 +186,7 @@ window.onload = function(){
             location.reload();
         } else if (type === "noHealth") {
             alert("You have died!");
+            location.reload();
         } else if (type === "maxFear") {
             alert("You are too scared to continue!")
         } else {
@@ -396,8 +397,55 @@ window.onload = function(){
     };
 
 
-    //moving the player around the board, detect collisions. if collision with enemy/event, run event.
+    //moving the player around the board, detect collisions. if collision with enemy/event, run event. also enemy moves with each key press
     function movePlayer(direction) {
+        //enemy movement is tagged to directional key press. one press one move
+        for (var enemies in __enemyPositions) {
+            switch (Math.floor(Math.random() * 4)) {
+                case 0:
+                    //if no wall at the north side of enemy
+                    if (__createCells[__enemyPositions[enemies][0]][__enemyPositions[enemies][1]][0] == 1) {
+                        //remove image
+                        $("#" + __enemyPositions[enemies][0] + "-" + __enemyPositions[enemies][1]).css("background-image", "none");
+                        //set new position
+                        __enemyPositions[enemies][0] = __enemyPositions[enemies][0] - 1;
+                    }
+                    break;
+                case 1:
+                    //if no wall at the east side of enemy
+                    if (__createCells[__enemyPositions[enemies][0]][__enemyPositions[enemies][1]][1] == 1) {
+                        //remove image
+                        $("#" + __enemyPositions[enemies][0] + "-" + __enemyPositions[enemies][1]).css("background-image", "none");
+                        //set new position
+                        __enemyPositions[enemies][1] = __enemyPositions[enemies][1] + 1;
+                        
+                    }
+                    break;
+                case 2:
+                    //if no wall at the south side of enemy
+                    if (__createCells[__enemyPositions[enemies][0]][__enemyPositions[enemies][1]][2] == 1) {
+                        //remove image
+                        $("#" + __enemyPositions[enemies][0] + "-" + __enemyPositions[enemies][1]).css("background-image", "none");
+                        //set new position
+                        __enemyPositions[enemies][0] = __enemyPositions[enemies][0] + 1;
+                        
+                    }
+                    break;
+                case 3:
+                    //if no wall at the west side of enemy
+                    if (__createCells[__enemyPositions[enemies][0]][__enemyPositions[enemies][1]][3] == 1) {
+                        //remove image
+                        $("#" + __enemyPositions[enemies][0] + "-" + __enemyPositions[enemies][1]).css("background-image", "none");
+                        //set new position
+                        __enemyPositions[enemies][1] = __enemyPositions[enemies][1] - 1;
+                        
+                    }
+                    break;
+            }
+            //show enemy sprite at new position
+            $("#" + __enemyPositions[enemies][0] + "-" + __enemyPositions[enemies][1]).css("background-image", "url('./img/wolf.png");
+        }
+
         //if up arrow was pressed,
         if (direction === "north") {
             //check if there are walls north of __currentCell
@@ -464,7 +512,7 @@ window.onload = function(){
         //if exit has been reached
         if (("[" + __endRow + "," + __endCol + "]") === JSON.stringify(__currentCell)) {
             gameEnd("reachedExit");
-        }
+        };
     };
 
     //adding event listeners to arrow keys (might seem redundant, but allows for additional keys to be listened to in the future)
@@ -485,7 +533,7 @@ window.onload = function(){
                 movePlayer("west");
             }
         }));
-    }
+    };
 
     //create positions for enemies based on number selected and show them on maze
     function createEnemies(number) {
@@ -495,8 +543,9 @@ window.onload = function(){
             //throw the x-y coordinates onto __enemyPositions object
             __enemyPositions["enemy" + i] = [randomX, randomY];
             $("#" + randomX + "-" + randomY).css({"background-image": "url('./img/wolf.png", "background-repeat": "no-repeat"});
+
         };
-    }
+    };
 
     //create random worldEvents which DO NOT show on the maze
     function createWorldEvents(number) {
@@ -506,9 +555,11 @@ window.onload = function(){
             //throw the x-y coordinates onto __worldEvents object
             __worldEvents["worldEvent" + i] = [randomX, randomY];
         };
-    }
+    };
 
-
+    
+        
+    
 
 
 
