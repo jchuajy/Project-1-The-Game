@@ -3,6 +3,8 @@
 //Text to display on game initialise
 var initialText = "<p> Welcome to Escape of Exiles! </p><p>Make your way through dangerous terrain and enemies to find the escape portal. </p><p> To begin your journey, type in your name... </p> <p> <input id='playerNameInput' type='text' value='Player One'> <button id='submitPlayerName' type='submit'>Submit</button></p>"
 
+//Text to display on top of map
+var mazeInstructions = "<p> Use the directional keys to move. Find the exit portal! Beware dangerous monsters!</p>"
 //Establishing encounters	
 var worldEvent = [	{
 						name: "poisonBog",

@@ -1,11 +1,39 @@
 //create global variables for easy access
-var __currentCell;
+var __currentCell = [];
 var __createCells;
 var __enemyPositions = {};
 var __worldEvents = {};
+var __playerName;
+var __playerStatus = {
+        gold: 0,
+        durability: 0,
+        health: 10,
+        fear: 0
+    };
+var __endRow = 0;
+var __endCol = 0;
+var __maxPlayerHealth = 10;
 
+//Open overlay
+function openOverlay() {
+    $("#mainOverlay").css("height", "80%");
+};
 
+//closes overlay
+function closeOverlay() {
+    $(window).off();
+    $("#mainOverlay").css("height", "0%");
+};
 
+//Open sec overlay
+function openSecOverlay() {
+    $("#secOverlay").css("height", "80%");
+};
+
+//closes sec overlay
+function closeSecOverlay() {
+    $("#secOverlay").css("height", "0%");
+};
 
 //creates maze
 function createMaze(numberOfCols, numberOfRows) {
@@ -79,28 +107,56 @@ function createMaze(numberOfCols, numberOfRows) {
 };
 
 
+
+//start of game execution
 window.onload = function(){
 
-    //create the maze based on variables. DO IT!
-    var doIT = createMaze(15,15);
-    for (var i = 0; i < doIT.length; i++) {
-        $("#maze").append("<div class='rowContainer'id='row" + i  + "'>");
-        for (var j = 0; j < doIT[i].length; j++) {
-            var cellID = i+"-"+j;
-            //add border if border values = 0
-            $("#row" + i).append("<div class='cellDiv' id='" + cellID + "'></div>");
-            if (doIT[i][j][0] == 0) { $("#" + cellID).css("border-top", "2px solid white"); }
-            if (doIT[i][j][1] == 0) { $("#" + cellID).css("border-right", "2px solid white"); }
-            if (doIT[i][j][2] == 0) { $("#" + cellID).css("border-bottom", "2px solid white"); }
-            if (doIT[i][j][3] == 0) { $("#" + cellID).css("border-left", "2px solid white"); }
+    //creates and prints maze onto mainOverlay, as well as instructional text
+    function generateMaze() {
+        changeOverlayContent(mazeInstructions);
+        //create the maze based on variables. DO IT!
+        var doIT = createMaze(15,15);
+        for (var i = 0; i < doIT.length; i++) {
+            $("#maze").append("<div class='rowContainer'id='row" + i  + "'>");
+            for (var j = 0; j < doIT[i].length; j++) {
+                var cellID = i+"-"+j;
+                //add border if border values = 0
+                $("#row" + i).append("<div class='cellDiv' id='" + cellID + "'></div>");
+                if (doIT[i][j][0] == 0) { $("#" + cellID).css("border-top", "2px solid white"); }
+                if (doIT[i][j][1] == 0) { $("#" + cellID).css("border-right", "2px solid white"); }
+                if (doIT[i][j][2] == 0) { $("#" + cellID).css("border-bottom", "2px solid white"); }
+                if (doIT[i][j][3] == 0) { $("#" + cellID).css("border-left", "2px solid white"); }
+            };
+            $("#maze").append("</div>");
         };
-        $("#maze").append("</div>");
     };
 
-    //add sprite to current cell (just as a randomised start point for player)
-    $("#" + __currentCell[0] + "-" + __currentCell[1]).css("background-image", "url('./img/marauderSprite.jpg");
+    //change mainOverlay content
+    function changeOverlayContent(content) {
+        $("#overlayContent").html("");
+        $("#overlayContent").html(content);
+    };
 
-    //moving the player around the board
+    //change secOverlayContent
+    function changeSecOverlayContent(content) {
+        $("#secOverlayContent").html("");
+        $("#secOverlayContent").html(content);
+    };
+
+
+    //randomise fight battles (which will run each time player enters new room)
+    function exeFightEvent() {
+        console.log("fight!");
+    };
+
+    //creation of world events (which will run each time player enters new room)
+    function exeWorldEvent() {
+        console.log("worldEvent!");
+    };
+
+
+
+    //moving the player around the board, detect collisions. if collision with enemy/event, run event.
     function movePlayer(direction) {
         //if up arrow was pressed,
         if (direction === "north") {
@@ -143,27 +199,49 @@ window.onload = function(){
         }
         //show player sprite at new __currentCell
         $("#" + __currentCell[0] + "-" + __currentCell[1]).css("background-image", "url('./img/marauderSprite.jpg");
+
+        //run event if collision detected
+        //for all coordinates in enemy positions
+        for (var pos in __enemyPositions) {
+            //stringifies array to check if contained values are equal (player collision with enemy)
+            if (JSON.stringify(__enemyPositions[pos]) === JSON.stringify(__currentCell)) {
+                //remove enemy from object (remove from maze)
+                delete __enemyPositions[pos];
+                exeFightEvent();
+            }
+        };
+
+        //for all coordinates in worldEvents
+        for (var epos in __worldEvents) {
+            //stringifies array to check if contained values are equal (player collision with world events)
+            if (JSON.stringify(__worldEvents[epos]) === JSON.stringify(__currentCell)) {
+                //remove event from object (remove from maze)
+                delete __worldEvents[epos];
+                exeWorldEvent();
+            };
+        };
     };
 
 
     //adding event listeners to arrow keys (might seem redundant, but allows for additional keys to be listened to in the future)
-    $(window).keydown(function(event) {
-        //if direction keys are pressed, prevent default action (stop it from scrolling)
-        if (event.which == 37 || event.which == 38 || event.which == 39 || event.which == 40) {
-            event.preventDefault();
-        }
-        //if up arrow key is pressed
-        if (event.which == 38) {
-            movePlayer("north");
-        } else if (event.which == 39) {
-            movePlayer("east");
-        } else if (event.which == 40) {
-            movePlayer("south");
-        } else if (event.which == 37) {
-            movePlayer("west");
-        }
-    });
-
+    function directionalKeys() {
+        $(window).on("keydown",(function(event) {
+            //if direction keys are pressed, prevent default action (stop it from scrolling)
+            if (event.which == 37 || event.which == 38 || event.which == 39 || event.which == 40) {
+                event.preventDefault();
+            }
+            //if up arrow key is pressed
+            if (event.which == 38) {
+                movePlayer("north");
+            } else if (event.which == 39) {
+                movePlayer("east");
+            } else if (event.which == 40) {
+                movePlayer("south");
+            } else if (event.which == 37) {
+                movePlayer("west");
+            }
+        }));
+    }
     //create positions for enemies based on number selected and show them on maze
     function createEnemies(number) {
         for (var i = 0; i < number; i++) {
@@ -175,7 +253,7 @@ window.onload = function(){
         };
     }
 
-    createEnemies(5);
+
 
     //create random worldEvents which DO NOT show on the maze
     function createWorldEvents(number) {
@@ -187,7 +265,70 @@ window.onload = function(){
         };
     }
 
-    createWorldEvents(5);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    function gameStart() {
+        //create and print maze on mainOverlay
+        generateMaze();
+        //show welcome text
+        changeSecOverlayContent(initialText);
+        //add event listener to submit button: get playername and close overlay
+        $("#submitPlayerName").click(function() {
+            __playerName = $("#playerNameInput").val();
+            closeSecOverlay();
+            openOverlay();
+        });
+        //reset player stats
+        __playerStatus["gold"] = 200;
+        __playerStatus["durability"] = 10;
+        __playerStatus["health"] = 10;
+        __playerStatus["fear"] = 0;
+        __maxPlayerHealth = 10;
+        //add sprite to current cell (just as a randomised start point for player)
+        $("#" + __currentCell[0] + "-" + __currentCell[1]).css("background-image", "url('./img/marauderSprite.jpg')");
+        //create and print enemies on maze
+        createEnemies(5);
+        //create world events (not shown on maze)
+        createWorldEvents(5);
+        //create exit point
+        __endRow = Math.floor((Math.random() * (__createCells.length - 1)));
+        __endCol = Math.floor((Math.random() * (__createCells.length - 1)));
+        //add sprite on exit point on variable __map
+        $("#" + __endRow + "-" + __endCol).css("background-image", "url('./img/portal.jpeg')");
+        //add event listeners to directional keys
+        directionalKeys();
+
+ 
+
+    };
+    gameStart();
+
+
+
+
+
+
+
+
+
 
 };
 
