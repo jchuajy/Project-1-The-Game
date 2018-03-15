@@ -118,3 +118,27 @@ body {
     color: #958B72;
     display: block; /* Display block instead of inline */
 }
+
+#colourBorder {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: cover;
+  -webkit-animation: fadeinout 2s linear forwards;
+  animation: fadeinout 2s linear forwards;
+  visibility: hidden;
+  z-index: 10;
+  pointer-events: none;
+}
+
+@-webkit-keyframes fadeinout {
+  0%,100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+@keyframes fadeinout {
+  0%,100% { opacity: 0; }
+  50% { opacity: 1; }
+}

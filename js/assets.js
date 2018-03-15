@@ -53,7 +53,7 @@ var fightEvent = [	{
 						name: "centaurFight",
 						text: "<p> While exploring, you come across a large centaur! Swipe your mouse to bash his head in with your mace. </p>",
 						image: "./img/centaur.jpeg",
-						winText: "<p> You have successfully defeated the centaur! Gain 50 gold. </p>",
+						winText: "<p> You have successfully defeated the centaur! Unfortunately you got too close and were hit by its hooves. Lose 1 health. BUT gained 50 gold. </p>",
 						health: 0,
 						durability: 0,
 						fear: 0,

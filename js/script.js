@@ -7,12 +7,12 @@ var __playerName;
 var __playerStatus = {
         gold: 0,
         durability: 0,
-        health: 10,
+        health: 5,
         fear: 0
     };
 var __endRow = 0;
 var __endCol = 0;
-var __maxPlayerHealth = 10;
+var __maxPlayerHealth = 5;
 
 
 
@@ -121,6 +121,11 @@ window.onload = function(){
         openOverlay();
     }
 
+    function closeMainOpenSec() {
+        closeOverlay();
+        openSecOverlay();
+    }
+
     //get find corresponding value of key in each event
     function findValue(event, eventNumber, key) {
         for (var searchKey in event[eventNumber]) {
@@ -174,6 +179,21 @@ window.onload = function(){
         $("#secOverlayContent").html(content);
     };
 
+    //things to execute when game ends
+    function gameEnd(type) {
+        if (type === "reachedExit") {
+            alert("You have reached the exit!");
+            location.reload();
+        } else if (type === "noHealth") {
+            alert("You have died!");
+        } else if (type === "maxFear") {
+            alert("You are too scared to continue!")
+        } else {
+            //included as a error catch
+            return;
+        };
+    };
+
     //different varieties of fight events
     //centaur fight event
     function centaurFight() {
@@ -184,6 +204,7 @@ window.onload = function(){
         var enemyX;
         var enemyY;
         __playerStatus["health"] = __playerStatus["health"] - 1;
+        __playerStatus["gold"] = __playerStatus["gold"] + 50;
         buildHealth();
         //show event text
         changeSecOverlayContent(findValue(fightEvent, 0, "text"));
@@ -201,6 +222,9 @@ window.onload = function(){
             $("#nextButton").css({"display": "block", "margin": "0 auto"});
             //add event listener to button;
             $("#nextButton").click(closeSecOpenMain);
+            if (__playerStatus["health"] === 0) {
+                gameEnd("noHealth");
+            }
         }
         //find the element's distance from document window. in this case enemyImage
         function offset(el) {
@@ -290,6 +314,9 @@ window.onload = function(){
             $("#nextButton").css({"display": "block", "margin": "0 auto"});
             //add event listener to button;
             $("#nextButton").click(closeSecOpenMain);
+            if (__playerStatus["health"] === 0) {
+                gameEnd("noHealth");
+            };
         };
         
 
@@ -302,6 +329,13 @@ window.onload = function(){
         closeOverlay();
         //open sec overlay
         openSecOverlay();
+        //show borderflash
+            $("<div>").attr("id", "colourBorder").appendTo($("body"));
+            $("#colourBorder").css({"visibility": "visible",
+                                    "background-image": "url('./img/redBorder.png')"
+                                });
+            //remove after 4s
+            setTimeout(function() {$("#colourBorder").remove();}, 2000);
         //randomise the event that will occur
         switch (Math.floor(Math.random() * Math.floor(fightEvent.length))) {
             case 0: 
@@ -311,16 +345,55 @@ window.onload = function(){
             spiderFight();
             break;
         };
-
-
-
     };
 
     //creation of world events (which will run each time player enters new room)
     function exeWorldEvent() {
-        console.log("worldEvent!");
-    };
+        var randomise = Math.floor(Math.random() * (worldEvent.length));
+        //show event text on main display
+        changeSecOverlayContent(findValue(worldEvent, randomise, "text"));
+        //change background image STRANGE url address
+        $("body").css("background-image", "url(" + worldEvent[randomise]["image"] + ")");
+        //switch to secOverlay
+        closeMainOpenSec();
+        //add button to secOverlay
+        $("<button>").html("Next").attr("id", "nextButton").appendTo($("#secOverlayContent"));
+        //update playerStatus with values from assets.js + show coloured border
+        function changeAttribute() {
+            __playerStatus.health = __playerStatus.health + findValue(worldEvent, randomise, "health");
+            __playerStatus.durability = __playerStatus.durability + findValue(worldEvent, randomise, "durability");
+            __playerStatus.fear = __playerStatus.fear + findValue(worldEvent, randomise, "fear");
+            //find out what border type to display
+            var borderType;
+            if (findValue(worldEvent, randomise, "health") > 0) {
+                borderType = "./img/yellowBorder.png";
+                } else if (findValue(worldEvent, randomise, "health") < 0) {
+                    borderType = "./img/redBorder.png";
+                } else if (findValue(worldEvent, randomise, "fear") > 0) {
+                    borderType = "./img/blackBorder.png";
+                } else if (findValue(worldEvent, randomise, "durability") < 0) {
+                    borderType = "./img/blueBorder.png";
+                };
+            //show borderflash
+            $("<div>").attr("id", "colourBorder").appendTo($("body"));
+            $("#colourBorder").css({"visibility": "visible",
+                                    "background-image": "url('" + borderType + "')"
+                                });
+            //remove after 4s
+            setTimeout(function() {$("#colourBorder").remove();}, 2000);
+            //show attribute change text (text2)
+            changeSecOverlayContent(findValue(worldEvent, randomise, "text2"));
+            //create button to move to next screen
+            $("<button>").html("Next").attr("id", "nextButton").appendTo($("#secOverlayContent"));
+            //add event listener to button;
+            $("#nextButton").click(closeSecOpenMain);
+            //update health bar
+            buildHealth();
+        };
+        //add event listener to button
+        $("#nextButton").click(changeAttribute);
 
+    };
 
 
     //moving the player around the board, detect collisions. if collision with enemy/event, run event.
@@ -387,6 +460,11 @@ window.onload = function(){
                 exeWorldEvent();
             };
         };
+
+        //if exit has been reached
+        if (("[" + __endRow + "," + __endCol + "]") === JSON.stringify(__currentCell)) {
+            gameEnd("reachedExit");
+        }
     };
 
     //adding event listeners to arrow keys (might seem redundant, but allows for additional keys to be listened to in the future)
@@ -464,9 +542,9 @@ window.onload = function(){
         //reset player stats
         __playerStatus["gold"] = 200;
         __playerStatus["durability"] = 10;
-        __playerStatus["health"] = 10;
+        __playerStatus["health"] = 5;
         __playerStatus["fear"] = 0;
-        __maxPlayerHealth = 10;
+        __maxPlayerHealth = 5;
         //add sprite to current cell (just as a randomised start point for player)
         $("#" + __currentCell[0] + "-" + __currentCell[1]).css("background-image", "url('./img/marauderSprite.jpg')");
         //create and print enemies on maze
