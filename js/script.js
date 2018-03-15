@@ -1,7 +1,7 @@
 //create global variables for easy access
 var __currentCell;
 var __createCells;
-
+var __enemyPositions = {};
 
 
 
@@ -163,9 +163,18 @@ window.onload = function(){
         }
     });
 
+    //create positions for enemies based on number selected and show them on maze
+    function createEnemies(number) {
+        for (var i = 0; i < number; i++) {
+            var randomX = Math.floor(Math.random() * Math.floor(__createCells.length));
+            var randomY = Math.floor(Math.random() * Math.floor(__createCells[0].length));
+            //throw the x-y coordinates onto __enemyPositions object
+            __enemyPositions["enemy" + i] = [randomX, randomY];
+            $("#" + randomX + "-" + randomY).css({"background-image": "url('./img/wolf.png", "background-repeat": "no-repeat"});
+        }
+    }
 
-
-
+    createEnemies(5);
 
 
 
