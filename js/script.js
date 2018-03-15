@@ -2,6 +2,7 @@
 var __currentCell;
 var __createCells;
 var __enemyPositions = {};
+var __worldEvents = {};
 
 
 
@@ -171,14 +172,22 @@ window.onload = function(){
             //throw the x-y coordinates onto __enemyPositions object
             __enemyPositions["enemy" + i] = [randomX, randomY];
             $("#" + randomX + "-" + randomY).css({"background-image": "url('./img/wolf.png", "background-repeat": "no-repeat"});
-        }
+        };
     }
 
     createEnemies(5);
 
+    //create random worldEvents which DO NOT show on the maze
+    function createWorldEvents(number) {
+        for (var i = 0; i < number; i++) {
+            var randomX = Math.floor(Math.random() * Math.floor(__createCells.length));
+            var randomY = Math.floor(Math.random() * Math.floor(__createCells[0].length));
+            //throw the x-y coordinates onto __worldEvents object
+            __worldEvents["worldEvent" + i] = [randomX, randomY];
+        };
+    }
 
-
-
+    createWorldEvents(5);
 
 };
 
