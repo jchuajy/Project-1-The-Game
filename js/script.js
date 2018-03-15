@@ -14,26 +14,7 @@ var __endRow = 0;
 var __endCol = 0;
 var __maxPlayerHealth = 10;
 
-//Open overlay
-function openOverlay() {
-    $("#mainOverlay").css("height", "80%");
-};
 
-//closes overlay
-function closeOverlay() {
-    $(window).off();
-    $("#mainOverlay").css("height", "0%");
-};
-
-//Open sec overlay
-function openSecOverlay() {
-    $("#secOverlay").css("height", "80%");
-};
-
-//closes sec overlay
-function closeSecOverlay() {
-    $("#secOverlay").css("height", "0%");
-};
 
 //creates maze
 function createMaze(numberOfCols, numberOfRows) {
@@ -65,10 +46,10 @@ function createMaze(numberOfCols, numberOfRows) {
     //run through entire maze
     while (cellsChecked < __totalCells) {
         //find all cells around the current cell
-        var checkAround = [[__currentCell[0]-1, __currentCell[1], 0, 2], //find north
-                            [__currentCell[0], __currentCell[1]+1, 1, 3], //find east
-                            [__currentCell[0]+1, __currentCell[1], 2, 0],   //find south
-                            [__currentCell[0], __currentCell[1]-1, 3, 1]];  //find west
+        var checkAround = [[__currentCell[0] - 1, __currentCell[1], 0, 2], //find north
+                            [__currentCell[0], __currentCell[1] + 1, 1, 3], //find east
+                            [__currentCell[0] + 1, __currentCell[1], 2, 0],   //find south
+                            [__currentCell[0], __currentCell[1] - 1, 3, 1]];  //find west
         //create array for cells around the __currentCell
         var neighbours = [];
 
@@ -110,6 +91,29 @@ function createMaze(numberOfCols, numberOfRows) {
 
 //start of game execution
 window.onload = function(){
+    //Open overlay
+    function openOverlay() {
+        //add event listeners to directional keys
+        directionalKeys();
+        $("#mainOverlay").css("height", "80%");
+    };
+
+    //closes overlay
+    function closeOverlay() {
+        //remove directionalkeys() when mainOverlay is not in focus
+        $(window).off();
+        $("#mainOverlay").css("height", "0%");
+    };
+
+    //Open sec overlay
+    function openSecOverlay() {
+        $("#secOverlay").css("height", "80%");
+    };
+
+    //closes sec overlay
+    function closeSecOverlay() {
+        $("#secOverlay").css("height", "0%");
+    };
 
     //creates and prints maze onto mainOverlay, as well as instructional text
     function generateMaze() {
@@ -222,7 +226,6 @@ window.onload = function(){
         };
     };
 
-
     //adding event listeners to arrow keys (might seem redundant, but allows for additional keys to be listened to in the future)
     function directionalKeys() {
         $(window).on("keydown",(function(event) {
@@ -242,6 +245,7 @@ window.onload = function(){
             }
         }));
     }
+
     //create positions for enemies based on number selected and show them on maze
     function createEnemies(number) {
         for (var i = 0; i < number; i++) {
@@ -252,8 +256,6 @@ window.onload = function(){
             $("#" + randomX + "-" + randomY).css({"background-image": "url('./img/wolf.png", "background-repeat": "no-repeat"});
         };
     }
-
-
 
     //create random worldEvents which DO NOT show on the maze
     function createWorldEvents(number) {
@@ -313,8 +315,7 @@ window.onload = function(){
         __endCol = Math.floor((Math.random() * (__createCells.length - 1)));
         //add sprite on exit point on variable __map
         $("#" + __endRow + "-" + __endCol).css("background-image", "url('./img/portal.jpeg')");
-        //add event listeners to directional keys
-        directionalKeys();
+        
 
  
 
