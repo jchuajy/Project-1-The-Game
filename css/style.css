@@ -3,34 +3,49 @@
   src: url("../css/fontin_pc/Fontin-Regular.otf");
 }
 
-#statusBar {
-  height: 15vh;
-  width: 60vw;
+body {
+  background-image: url("../img/wallPaperwheader.jpg");
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+#healthBarContainer {
+  background-image: url("../img/emptyGlobe.png");
+  background-repeat: no-repeat;
+  height: 290px;
+  width: 400px;
   position: fixed;
-  left: 20vw;
+  display: inline-block;
+  left: 0;
   bottom: 0;
-  display: flex;
-  justify-content: space-evenly;
+  z-index: 2;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
-.container-fluid {
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-h1 {
-  line-height: 30px;
+#manaBarContainer {
+  background-image: url("../img/manaGlobe.png");
+  background-repeat: no-repeat;
+  height: 290px;
+  width: 400px;
+  position: fixed;
+  display: inline-block;
+  left: 80%;
+  bottom: 0;
+  z-index: 2;
 }
 
  /* The Overlay (background) */
 #mainOverlay {  
-    height: 0;
+    height: 65%;
     width: 75%;
     position: fixed; /* Stay in place */
-    z-index: 5; /* Sit on top */
-    left: 12vw;
-    top: 6vh;
+    z-index: 3; /* Sit on top */
+    left: 12%;
+    top: 6%;
     background-color: rgb(0,0,0); /* Black fallback color */
     background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
     overflow-x: hidden; /* Disable horizontal scroll */
@@ -54,134 +69,22 @@ h1 {
     display: block; /* Display block instead of inline */
 }
 
-
-/* Position the close button (top right corner) */
-#overlay #closeOverlay {
-    position: absolute;
-    top: 20px;
-    right: 45px;
-    font-size: 60px;
+.cellDiv {
+    height: 30px;
+    display: inline-block;
+    width: 30px;
+    border: 2px solid;
+    border-color: rgba(0,0,0, 0.9);
+    padding: 0;
+    margin: 0;
 }
 
-a {
-  font-size: 50px;
-  text-align: right;
-  float: right;
-  margin-right: 20px;
-  color: red;
-  visibility: hidden;
-}
-                                                                                                    
-#bodyHeader {
-  display: inline-block;
-  position: fixed;
-  bottom: 93vh;
-  left: 10vw;
-  z-index: 6;
+.rowContainer {
+    height: 30px;
+
 }
 
-#healthBarContainer {
-  background-image: url("../img/emptyGlobe.png");
-  background-repeat: no-repeat;
-  height: 35vh;
-  width: 20vw;
-  position: fixed;
-  display: inline-block;
-  left: 0;
-  bottom: 0;
-  z-index: 2;
-  overflow-x: hidden;
-  overflow-y: hidden;
-}
-
-#healthBar {
-  position: absolute;
-  left: 0;
-  margin: 0;
-  border: 0;
-  padding: 0;
-  z-index: 2;
-  clip-path: inset(0 0 0 0);
-}
-
-#map {
-  background-image: url("../img/mapGlobe.png");
-  background-repeat: no-repeat;
-  height: 35vh;
-  width: 20vw;
-  position: fixed;
-  display: inline-block;
-  left: 80vw;
-  bottom: 0;
-  z-index: 2;
-}
-
-#mapFog {
-  background-image: url("../img/mapFog.png");
-  background-repeat: no-repeat;
-  position: fixed;
-  left: 80vw;
-  height: 35vh;
-  width: 20vw;
-  position: fixed;
-  display: inline-block;
-  bottom: 0;
-  z-index: 4;
-  clip-path: inset(80% 0 0 0);
-}
-
-#statusBar img {
-  margin: 0;
-  border: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
-body {
-  background-image: url("../img/wallPaper.jpg");
-  background-size: cover;
-  height: 100vh;
-  width: 100vw;
-  overflow-y: hidden;
-  overflow-x: hidden;
-}
-
-p {
-  font-family: Fontin-Regular;
-}
-
-#mapFull {
-  background-image: url("../img/mapFull.png");
-  background-repeat: no-repeat;
-  height: 35vh;
-  width: 20vw;
-  position: fixed;
-  display: inline-block;
-  left: 80vw;
-  bottom: 0;
-  z-index: 2;
-}
-
-#colourBorder {
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  display: inline-block;
-  background-repeat: no-repeat;
-  background-size: cover;
-  -webkit-animation: fadeinout 2s linear forwards;
-  animation: fadeinout 2s linear forwards;
-  visibility: hidden;
-  z-index: 10;
-  pointer-events: none;
-}
-
-@-webkit-keyframes fadeinout {
-  0%,100% { opacity: 0; }
-  50% { opacity: 1; }
-}
-
-@keyframes fadeinout {
-  0%,100% { opacity: 0; }
-  50% { opacity: 1; }
+#mazeContainer {
+  text-align: center;
+  padding-top: 20px;
 }
